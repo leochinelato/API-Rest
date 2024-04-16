@@ -1,4 +1,4 @@
-![image](https://github.com/leochinelato/API-Rest/assets/66490205/1c76d16e-998c-4444-8e17-7ebcf3679c4e)# API REST (Representational State Transfer)
+# API REST (Representational State Transfer)
 
 Esse repositório foi criado para apresentar meu primeiro contato com API em conformidade com a arquitetura REST.
 
