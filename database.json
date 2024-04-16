@@ -1,0 +1,14 @@
+{
+    "_default": {
+        "3": {
+            "id": 1,
+            "nome": "Banana",
+            "quantidade": 1
+        },
+        "4": {
+            "id": 2,
+            "nome": "Maca",
+            "quantidade": 1
+        }
+    }
+}
