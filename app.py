@@ -23,11 +23,12 @@ class Itens(BaseModel):
     count: int
 
 
-@app.get('/itens')  # Rota, endpoint...
-@spec.validate(resp=Response(HTTP_200=Itens))
-def buscar_itens():
-    '''Retorna todos os itens da base de dados.'''
-    return jsonify(Itens(itens=database.all(), count=len(database.all())).dict())
+@app.get('/itens/<int:id>')
+@spec.validate(resp=Response(HTTP_200=Item))
+def buscar_item(id):
+    '''Busca um item conforme o ID informado.'''
+    item = database.search(Query().id == id)[0]
+    return jsonify(item)
 
 
 @app.post('/itens')
