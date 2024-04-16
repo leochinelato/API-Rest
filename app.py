@@ -4,12 +4,20 @@ from flask import Flask, request, jsonify
 from flask_pydantic_spec import FlaskPydanticSpec, Response, Request
 from pydantic import BaseModel, Field
 from tinydb import TinyDB, Query
+from tinydb.storages import MemoryStorage
+
 
 app = Flask(__name__)
 spec = FlaskPydanticSpec('flask', title='Estudando API Rest.')
 spec.register(app)
-database = TinyDB('database.json')
+database = TinyDB(storage=MemoryStorage)
 c = count()
+
+
+class QueryItem(BaseModel):
+    id: Optional[int]
+    nome: Optional[str]
+    idade: Optional[int]
 
 
 class Item(BaseModel):
@@ -24,16 +32,22 @@ class Itens(BaseModel):
 
 
 @app.get('/itens')  # Rota, endpoint...
-@spec.validate(resp=Response(HTTP_200=Itens))
+@spec.validate(query=QueryItem, resp=Response(HTTP_200=Itens))
 def buscar_itens():
     '''Retorna todos os itens da base de dados.'''
-    return jsonify(Itens(itens=database.all(), count=len(database.all())).dict())
+    query = request.context.query.dict(exclude_none=True)
+    todos_os_itens = database.search(Query().fragment(query))
+    return jsonify(Itens(itens=todos_os_itens, count=len(todos_os_itens)).dict())
 
 
 @app.get('/itens/<int:id>')
 @spec.validate(resp=Response(HTTP_200=Item))
 def buscar_item(id):
-    item = database.search(Query().id == id)[0]
+    '''Retorna apena o item solicitado da base de dados.'''
+    try:
+        item = database.search(Query().id == id)[0]
+    except IndexError:
+        return {'message': 'Item not found!'}, 404
     return jsonify(item)
 
 
