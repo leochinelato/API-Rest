@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from tinydb import TinyDB, Query
 
 app = Flask(__name__)
-spec = FlaskPydanticSpec('flask', title='Estudando RestAPI.')
+spec = FlaskPydanticSpec('flask', title='Estudando API Rest.')
 spec.register(app)
 database = TinyDB('database.json')
 c = count()
