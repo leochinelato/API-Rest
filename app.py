@@ -8,7 +8,7 @@ from tinydb.storages import MemoryStorage
 
 
 app = Flask(__name__)
-spec = FlaskPydanticSpec('flask', title='Estudando API Rest.')
+spec = FlaskPydanticSpec('flask', title='API Rest.')
 spec.register(app)
 database = TinyDB(storage=MemoryStorage)
 c = count()
@@ -64,9 +64,8 @@ def inserir_item():
 @spec.validate(body=Request(Item), resp=Response(HTTP_200=Item))
 def altera_item(id):
     '''Altera um Item no banco de dados.'''
-    Item = Query()
     body = request.context.body.dict()
-    database.update(body, Item.id == id)
+    database.update(body, Query().id == id)
     return jsonify(body)
 
 
@@ -74,8 +73,7 @@ def altera_item(id):
 @spec.validate(resp=Response(HTTP_204=Item))
 def deleta_item(id):
     '''Remove um Item no banco de dados.'''
-    Item = Query()
-    database.remove(Item.id == id)
+    database.remove(Query().id == id)
     return jsonify({})
 
 
